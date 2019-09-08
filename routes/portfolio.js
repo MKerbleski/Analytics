@@ -36,13 +36,9 @@ function getSession(uuid){
 router.post('/', async (req, res, next) => {
     getSession(req.body.session.uuid).then(priorSession => {
         if(priorSession){
-            console.log('priorSession', priorSession)
             let oldData = priorSession.data
-            console.log('oldData', oldData)
             let oldTracker = oldData.tracker
-            console.log('oldTracker', oldTracker)
             req.body.tracker.unshift(...oldTracker)
-            console.log('req.body', req.body)
                 updateData(req.body).then(response => {
                     console.log('user session update')
                     res.status(200).json({ message: 'data update'})
