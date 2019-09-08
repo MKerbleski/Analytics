@@ -10,7 +10,7 @@ server.use(helmet());
 
 server.use(cors({
     credentials: true, 
-    whitelist: `http://localhost:3030`,
+    whitelist: `http://localhost:3030, http://kerble.ski`,
     // origin: `https://notes-app.xyz`,
  }));
 
