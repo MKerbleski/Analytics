@@ -10,11 +10,10 @@ router.use(express.json());
 
 function saveData(data){
     return db('portfolio')
-        .insert({name: 'portfolio', data: JSON.stringify(data)})
+        .insert({data: JSON.stringify(data)})
 }
 function getData(){
     return db('portfolio')
-    .where('name', 'portfolio')
 }
 
 router.post('/', async (req, res, next) => {
