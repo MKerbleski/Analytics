@@ -37,7 +37,7 @@ router.post('/', async (req, res, next) => {
     getSession(req.body.session.uuid).then(priorSession => {
         if(priorSession){
             console.log('priorSession', priorSession)
-            let oldData = JSON.parse(priorSession.data)
+            let oldData = priorSession.data
             console.log('oldData', oldData)
             let oldTracker = oldData.tracker
             console.log('oldTracker', oldTracker)
@@ -64,7 +64,7 @@ router.post('/', async (req, res, next) => {
 
 router.get('/', (req, res) => {
     getData().then(response => {
-        console.log('Returned data from DB', err)
+        console.log('Returned data from DB')
         res.status(200).json(response)
     }).catch(err => {
         console.log('err fetching data from DB', err)
