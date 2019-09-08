@@ -1,3 +1,4 @@
 /node_modules
 
 ./db/dev.sqlite3
+/db/dev.sqlite3
