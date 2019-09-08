@@ -10,21 +10,60 @@ router.use(express.json());
 
 function saveData(data){
     return db('portfolio')
-        .insert({data: JSON.stringify(data)})
+        .insert({uuid: data.session.uuid, data: JSON.stringify(data)})
 }
-function getData(){
+
+function getData(uuid){
+    if(uuid){
+        return db('portfolio')
+            .where('uuid', uuid)
+    } else {
+        return db('portfolio')
+    }
+}
+
+function updateData(data){
     return db('portfolio')
+        .update({data: JSON.stringify(data)})
+        .where('uuid', data.session.uuid)
+}
+
+function getSession(uuid){
+    return db('portfolio')
+        .where('uuid', uuid).first()
 }
 
 router.post('/', async (req, res, next) => {
-    saveData(req.body).then(response => {
-        res.status(200).json({ message: 'data saved'})
+    getSession(req.body.session.uuid).then(priorSession => {
+        if(priorSession){
+            let oldData = JSON.parse(priorSession.data)
+            let oldTracker = oldData.tracker
+            req.body.tracker.unshift(...oldTracker)
+                updateData(req.body).then(response => {
+                    console.log('user session update')
+                    res.status(200).json({ message: 'data update'})
+                }).catch(err => {
+                    console.log('error saving session data', err)
+                })
+        } else {
+            saveData(req.body).then(response => {
+                console.log('New session saved', Date.now())
+                res.status(200).json({ message: 'data saved'})
+            }).catch(err => {
+                console.log('error saving session data', err)
+            })
+        }
+    }).catch(err => {
+        console.log('err', err)
     })
-})
+}) 
 
 router.get('/', (req, res) => {
     getData(req.body).then(response => {
+        console.log('Returned data from DB', err)
         res.status(200).json(response)
+    }).catch(err => {
+        console.log('err fetching data from DB', err)
     })
 })
 
