@@ -4,6 +4,7 @@ const helmet = require('helmet');
 const cors = require('cors')
 const server = express();
 const portfolio = require('./routes/portfolio')
+const brightfield = require('./routes/brightfield')
 
 server.use(express.json());
 server.use(helmet());
@@ -19,6 +20,8 @@ server.get('/', (req, res) => {
 })
 
 server.use('/portfolio', portfolio)
+
+server.use('/brightfield', brightfield)
 
 const PORT = process.env.PORT || 3300; 
 const ENV = process.env.DB || 'Development'; 
